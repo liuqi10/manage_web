@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="main">
+<div class="formlist">
+    <form action=" " method="post">
+        <table class="table table-borderd">
+            <tr>
+                <td><p>大版本编号：</p></td>
+                <td><input type="text" id="dbbbh" name="dbbbh"></td>
+            </tr>
+            <tr>
+                <td><p>提测版本编号：</p></td>
+                <td><input type="text" id="tcbbbh" name="tcbbbh"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"></td>
+                <td><input type="reset" value="重置"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<p>{{ code }}</p>
+<div class="chaxunlist">
+    <table class="table table-borderd" id="pversion">
+        <tr>
+            <th>序号</th>
+            <th>大版本编号</th>
+            <th>提测版本编号</th>
+        </tr>
+    </table>
+    <p id="nr"></p>
+</div>
+</div>
+    <script>
+        $(function () {
+            $.ajax({
+                type:"GET",
+                url:"",
+                dataType:'json',
+                success:function (data) {
+                    for (var i=0;i<data.length;i++){
+                        $("#pversion").append('<tr><td>'+(i+1)+'</td><td>'+data[i][0]+'</td><td>'+data[i][1]+'</td></tr>');
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}

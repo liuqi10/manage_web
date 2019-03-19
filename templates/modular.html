@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="main">
+<div class="formlist">
+    <form action=" " method="post">
+        <table class="table table-borderd">
+            <tr>
+                <td><p>是否为新组件：</p></td>
+                <td>
+                    <select name="sfxzj" id="sfxzj" style="width: 100px">
+                        <option value="True">是</option>
+                        <option value="False">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><p>组件模块名称：</p></td>
+                <td><input type="text" id="zjmkmc" name="zjmkmc"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"></td>
+                <td><input type="reset" value="重置"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<p>{{ code }}</p>
+<div class="chaxunlist">
+    <table class="table table-borderd" id="pversion">
+        <tr>
+            <th>序号</th>
+            <th>是否为新组件</th>
+            <th>组件模块名称</th>
+        </tr>
+    </table>
+    <p id="nr"></p>
+</div>
+</div>
+    <script>
+        $(function () {
+            $.ajax({
+                type:"GET",
+                url:"",
+                dataType:'json',
+                success:function (data) {
+                    for (var i=0;i<data.length;i++){
+                        if(data[i][0]){
+                            $("#pversion").append('<tr><td>'+(i+1)+'</td><td>是</td><td>'+data[i][1]+'</td></tr>');
+                        }
+                        else {
+                            $("#pversion").append('<tr><td>'+(i+1)+'</td><td>否</td><td>'+data[i][1]+'</td></tr>');
+                        }
+
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}

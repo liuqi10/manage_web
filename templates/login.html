@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>统计主页面</title>
+</head>
+<body>
+<div id="top">
+    <h1>统计系统登录</h1>
+    <form action="/login/" method="post">
+        <input type="text" name="username">
+        <input type="text" name="password">
+        <input type="submit" value="提交">
+    </form>
+</div>
+<div id="centor">
+    {% for i in user_list %}
+        <tr>
+        <td>
+            <p>{{ i.usr}}</p>
+        </td>
+        <td>
+            <p>{{ i.pwd}}</p>
+        </td>
+        </tr>
+    {% endfor %}
+</div>
+</body>
+</html>

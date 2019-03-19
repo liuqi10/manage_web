@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div id="gx">
+    <div>
+        <input id="bug_cdbh" type="text" name="bug_cdbh">
+        <input id="chaxun1" type="submit" name="chaxun1" value="查询">
+    </div>
+    <div>
+        <p>{{ msg }}</p>
+    </div>
+    <form action="" method="post">
+        <table class="table">
+            <tr>
+                <th>系统BUG编号</th>
+                <td>
+                    <input type="hidden" name="bugid" id="bugid">
+                </td>
+            </tr>
+            <tr>
+                <th>大版本号</th>
+                <td>
+                    <select name="dbbh" id="dbbh" style="width: 160px"></select>
+                </td>
+            </tr>
+            <tr>
+                <th>提测版本编号</th>
+                <td>
+                    <select name="tcbbbh" id="tcbbbh" style="width: 160px"></select>
+                </td>
+            </tr>
+            <tr>
+                <th>组件模块</th>
+                <td>
+                    <select name="zjmk" id="zjmk" style="width: 130px"></select>
+                </td>
+            </tr>
+            <tr>
+                <th>问题描述</th>
+                <td><textarea name="postion" id="po" cols="60" rows="6"></textarea></td>
+            </tr>
+            <tr>
+                <th>禅道BUG编号</th>
+                <td><input type="text" name="bug_bh" id="bug_bh"></td>
+            </tr>
+            <tr>
+                <th>是否新模块</th>
+                <td>
+                    <select name="nmk" id="nmk" style="width: 100px">
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>问题等级</th>
+                <td>
+                    <select name="wtdj" id="wtdj" style="width: 100px">
+                        <option value="阻塞">阻塞</option>
+                        <option value="重要">重要</option>
+                        <option value="一般">一般</option>
+                        <option value="建议">建议</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>修改优先级</th>
+                <td>
+                    <select name="xgyxj" id="xgyxj" style="width: 100px">
+                        <option value="立刻">立刻</option>
+                        <option value="普通">普通</option>
+                        <option value="高">高</option>
+                        <option value="低">低</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>BUG是否已解决</th>
+                <td>
+                    <select name="bug_jj" id="bug_jj" style="width: 100px">
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>BUG是否验证通过已关闭</th>
+                <td>
+                    <select name="bug_clo" id="bug_clo" style="width: 100px">
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>是否为回归BUG</th>
+                <td>
+                    <select name="bug_hg" id="bug_hg" style="width: 100px">
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>创建人</th>
+                <td>
+                    <select name="cjr" id="cjr" style="width: 100px"></select>
+                </td>
+            </tr>
+            <tr>
+                <th>图片</th>
+                <td class="ts">
+                    <img src="{% static 'img/abc.png' %}" id="img" style="width: 300px;height: 200px">
+                    <p>*不用填写</p>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交" class="btn btn-info btn-lg"></td>
+                <td><input type="reset" value="重置" class="btn btn-info btn-lg"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+    <script>
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "",
+                dataType: 'json',
+                success: function (data1) {
+                    var bbgl = data1['results']['bbgl'];
+                    var typelist = data1['results']['type_list'];
+                    var pmname = data1['results']['pmname'];
+                    var usr = data1['results']['userinfo'];
+                    for (var i=0;i<bbgl.length;i++){
+                        $("#dbbh").append('<option value='+bbgl[i]+'>'+bbgl[i]+'</option>');
+                    };
+                    for (var j=0;j<typelist.length;j++){
+                        $("#tcbbbh").append('<option value='+typelist[j]+'>'+typelist[j]+'</option>')
+                    };
+                    for (var k=0;k<pmname.length;k++){
+                        $("#zjmk").append('<option value='+pmname[k]+'>'+pmname[k]+'</option>')
+                    };
+                    for (var l=0;l<usr.length;l++){
+                        $("#cjr").append('<option value='+usr[l]+'>'+usr[l]+'</option>')
+                    };
+                }
+            });
+            $("#chaxun1").click(function () {
+                var inputdata = $("#bug_cdbh").val();
+                $.ajax({
+                    type:"GET",
+                    url:"",
+                    dataType:'json',
+                    data:{"bug_cdbh":inputdata},
+                    success:function (data) {
+                        {#alert(JSON.stringify(data));#}
+                        var bug_data = data['results']['bug_data'];
+                        var image = data['results']['bug_img'];
+                        {#alert(image);#}
+                        $("#bugid").val(bug_data.bugid);
+                        $("#dbbh").children().each(function () {
+                            if($(this).val()==bug_data.bug_pvid){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#tcbbbh").children().each(function () {
+                            if($(this).val()==bug_data.bug_pmid){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#zjmk").children().each(function () {
+                            if($(this).val()==bug_data.bug_zj){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#po").val(bug_data.bug_wtms);
+                        $("#bug_bh").val(bug_data.bug_cdbh);
+                        $("#nmk").children().each(function () {
+                            if($(this).val()==bug_data.bug_sfxmk){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#wtdj").children().each(function () {
+                            if($(this).val()==bug_data.bug_wtdj){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#xgyxj").children().each(function () {
+                            if($(this).val()==bug_data.bug_xgyxj){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#bug_jj").children().each(function () {
+                            if($(this).val()==bug_data.bug_sfyjj){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                        $("#bug_clo").children().each(function () {
+                            if($(this).val()==bug_data.bug_sfyztg){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                         $("#bug_hg").children().each(function () {
+                            if($(this).val()==bug_data.bug_sfhg){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                         $("#cjr").children().each(function () {
+                            if($(this).val()==bug_data.bug_cjr){
+                                $(this).attr("selected",true);
+                            }
+                        });
+                         $("#img").attr("src",image);
+                    }
+                });
+            });
+        })
+    </script>
+{% endblock %}

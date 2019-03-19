@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BUG管理系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- 引入 echarts.js -->
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        .list{
+            background: #114f8e;
+            height: 65px;
+            overflow: hidden;
+        }
+        .list li{
+            float: left;
+            list-style: none;
+            margin: 0px 20px;
+            line-height: 65px;
+        }
+        .list li a{
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .list li a:hover{
+            color: cornflowerblue;
+        }
+        .ts p {
+            color: red;
+        }
+        .col-md-1{
+            text-align:center;
+        }
+        #table1 tr th{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="top">
+    <ul class="list">
+        <li><a href="{% url 'index' %}">首页</a></li>
+        <li><a href="{% url 'configversion' %}">配置提测版本</a></li>
+        <li><a href="{% url 'configmodular' %}">配置组件模块</a></li>
+        <li><a href="{% url 'subbug' %}">添加新BUG</a></li>
+        <li><a href="{% url 'updatebug' %}">更新BUG状态</a></li>
+        <li><a href="{% url 'countbug' %}">BUG数据统计</a></li>
+    </ul>
+</div>
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>

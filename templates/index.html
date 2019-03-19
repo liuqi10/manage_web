@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="main">
+<div id="top">
+    <p>首页</p>
+</div>
+<div id="center">
+    <table class="table">
+        <tr>
+            <th>当前大版本号：</th>
+            <td>
+                <select name="dbbh" id="dbbh" style="width: 160px"></select>
+            </td>
+            <th>当前提测版本编号：</th>
+            <td>
+                <select name="tcbbh" id="tcbbh" style="width: 160px">
+                    <option value="全部">全部</option>
+                </select>
+            </td>
+            <th>是否为回归BUG：</th>
+            <td>
+                <select name="sfhg" id="sfhg" style="width: 160px">
+                    <option value="全部">全部</option>
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </td>
+            <td>
+                <input type="submit" id="sub" value="查询">
+            </td>
+        </tr>
+    </table>
+    <table id="table1" class="table" style="word-wrap:break-word; word-break:break-all;">
+        <tr>
+            <th>序号</th>
+            <th>大版本号</th>
+            <th>提测版本编号</th>
+            <th>组件模块</th>
+            <th>禅道BUG编号</th>
+            <th>问题等级</th>
+            <th>问题描述</th>
+            <th>BUG是否已解决</th>
+            <th>BUG是否验证通过</th>
+            <th>是否为回归BUG</th>
+        </tr>
+    </table>
+</div>
+</div>
+<script>
+    $(function () {
+        //获取当前时间
+        var mydate = new Date();
+        nowdate = mydate.toLocaleString();
+        console.log(nowdate);
+        $("#top p").text("当前时间："+nowdate);
+        //通过异步请求获取查询数据
+        $.ajax({
+            type:"GET",
+            url:"",
+            dataType:'json',
+            success:function (data){
+                var pvnames = data['result']['pvnames'];
+                for(var i=0;i<pvnames.length;i++){
+                    $("#dbbh").append('<option value=' + pvnames[i]['pvname'] + '>' + pvnames[i]['pvname'] + '</option>')
+                };
+                var pvnumbers = data['result']['pvnumbers'];
+                for(var i=0;i<pvnumbers.length;i++){
+                    //alert(pvnumbers[i]['pvnumber']);
+                    $("#tcbbh").append('<option value=' + pvnumbers[i]['pvnumber'] + '>' + pvnumbers[i]['pvnumber'] + '</option>')
+                };
+            }
+        });
+        //根据条件进行筛选查询
+        $("#sub").click(function () {
+            $("#table1 tr:gt(0)").remove();
+            var dbbh = $("#dbbh").val();
+            var tcbbh = $("#tcbbh").val();
+            var sfhg = $("#sfhg").val();
+            $.ajax({
+                type:"GET",
+                url:"",
+                dataType: 'json',
+                data:{
+                    "dbbh":dbbh,
+                    "tcbbh":tcbbh,
+                    "sfhg":sfhg
+                },
+                success:function (data1) {
+                    var bug_datas = data1['result']['bug_datas'];
+                    for(var i=0;i<bug_datas.length;i++){
+                        var bug_sfyjj = "bug_sfyjj"+i;
+                        var bug_wtdj = "bug_wtdj"+i;
+                        var append_datas = '<tr><td class="col-md-1">'+(i+1)+'</td><td class="col-md-1">'+bug_datas[i]['bug_pvid']+'</td><td class="col-md-1">'+bug_datas[i]['bug_pmid']+'</td><td class="col-md-1">'+
+                            bug_datas[i]['bug_zj']+'</td><td class="col-md-1">'+bug_datas[i]['bug_cdbh']+'</td><td class="col-md-1" id='+bug_wtdj+'>'+bug_datas[i]['bug_wtdj']+'</td><td class="col-md-3">'+bug_datas[i]['bug_wtms']+
+                            '</td><td class="col-md-1" id='+bug_sfyjj+'>'+bug_datas[i]['bug_sfyjj']+'</td><td class="col-md-1">'+bug_datas[i]['bug_sfyztg']+'</td><td class="col-md-1">'+bug_datas[i]['bug_sfhg']+'</td></tr>';
+                        $("#table1").append(append_datas);
+                        var bug_sfyjj_value = $("#"+bug_sfyjj).text();
+                        var bug_wtdj_value = $("#"+bug_wtdj).text();
+                        if(bug_sfyjj_value == "否"){
+                            $("#"+bug_sfyjj).css("background","red");
+                            console.log("ok");
+                        }
+                        else {
+                            $("#"+bug_sfyjj).css("background","green");
+                        }
+                        if(bug_wtdj_value == "重要"){
+                            $("#"+bug_wtdj).css("background","yellow");
+                        }
+                    };
+
+                }
+            });
+        });
+        //根据查询结果显示设置
+    })
+</script>
+{% endblock %}
